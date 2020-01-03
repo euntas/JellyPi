@@ -18,12 +18,6 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerRigidbody = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
-
-        // TODO. 나중에 무기 들 때 설정으로 바꾸기
-        playerAnimator.SetInteger("WeaponType_int", 4);
-        playerAnimator.SetBool("Shoot_b", false);
-        playerAnimator.SetBool("Reload_b", false);
-
     }
 
     // FixedUpdate는 물리 갱신 주기에 맞춰 실행됨

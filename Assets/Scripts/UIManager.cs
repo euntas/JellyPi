@@ -19,9 +19,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public static UIManager m_instance; // 싱글톤이 할당될 변수
+
     public GameObject gameoverUI; // 게임 오버시 활성화할 UI
     public GameObject settingUI; // 게임 세팅 메뉴 UI
-    public static UIManager m_instance; // 싱글톤이 할당될 변수
+
+    public Text ammoText; // 탄약 표시용 텍스트
 
     // 게임 오버 UI 활성화
     public void SetActiveGameoverUI(bool active)
@@ -41,5 +44,11 @@ public class UIManager : MonoBehaviour
         SetActiveSettingUI(false);
 
         SceneManager.LoadScene("Main");
+    }
+
+    // 탄약 텍스트 갱신
+    public void UpdateAmmoText(int magAmmo, int remainAmmo)
+    {
+        ammoText.text = magAmmo + "/" + remainAmmo;
     }
 }
