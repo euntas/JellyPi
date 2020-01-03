@@ -43,6 +43,19 @@ public class PlayerInput : MonoBehaviour
         if (!isTouch)
         {
         }
+
+        // 게임오버 상태에서는 사용자 입력을 감지하지 않는다
+        //if (GameManager.instance != null && GameManager.instance.isGameover)
+        //{
+        //    fire = false;
+        //    reload = false;
+        //    return;
+        //}
+
+        //// fire에 관한 입력 감지
+        //fire = Input.GetButton(fireButtonName);
+        //// reload에 관한 입력 감지
+        //reload = Input.GetButtonDown(reloadButtonName);
     }
 
     public void OnPointerDown(BaseEventData inputData)
@@ -70,5 +83,15 @@ public class PlayerInput : MonoBehaviour
 
         horizontal = value.x;
         vertical = value.y;
+    }
+
+    public void SetFire(bool isFire)
+    {
+        fire = isFire;
+    }
+
+    public void SetReload(bool isReload)
+    {
+        reload = isReload;
     }
 }
