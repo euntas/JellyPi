@@ -128,6 +128,7 @@ public class Enemy : LivingEntity
             hitEffect.transform.position = hitPoint;
             hitEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
             hitEffect.Play();
+            Debug.Log("맞았음 : " + hitEffect.transform);
 
             // 피격 효과음 재생
             enemyAudioPlayer.PlayOneShot(hitSound);
