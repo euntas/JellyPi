@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     }
 
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수
+
+    private int score = 0; // 현재 게임 점수
     public bool isGameover { get; private set; } // 게임 오버 상태
 
     private void Awake()
@@ -50,5 +52,18 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("quit game");
         Application.Quit();
+    }
+
+    // 점수를 추가하고 UI 갱신
+    public void AddScore(int newScore)
+    {
+        // 게임 오버가 아닌 상태에서만 점수 증가 가능
+        if (!isGameover)
+        {
+            // 점수 추가
+            score += newScore;
+            // 점수 UI 텍스트 갱신
+            UIManager.instance.UpdateScoreText(score);
+        }
     }
 }
