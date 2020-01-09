@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI; // AI, 내비게이션 시스템 관련 코드를 가져오기
+using UnityEngine.UI;
 
 public class Enemy : LivingEntity
 {
@@ -16,6 +17,10 @@ public class Enemy : LivingEntity
     private Animator enemyAnimator; // 애니메이터 컴포넌트
     private AudioSource enemyAudioPlayer; // 오디오 소스 컴포넌트
     private Renderer enemyRenderer; // 렌더러 컴포넌트
+
+    private Canvas enemyCanvas; // enemy UI 캔버스
+    public Scrollbar HPScrollbar; // enemy HP bar
+    public Scrollbar MPScrollbar; // enemy MP bar
 
     public float damage = 20f; // 공격력
     public float timeBetAttack = 0.5f; // 공격 간격
@@ -47,6 +52,7 @@ public class Enemy : LivingEntity
         // 렌더러 컴포넌트는 자식 게임 오브젝트에 있으므로
         // GetComponentInChildren() 메서드 사용
         enemyRenderer = GetComponentInChildren<Renderer>();
+        enemyCanvas = GetComponentInChildren<Canvas>();
     }
 
     // 적 AI의 초기 스펙을 결정하는 셋업 메서드
@@ -69,10 +75,26 @@ public class Enemy : LivingEntity
         StartCoroutine(UpdatePath());
     }
 
+    protected override void OnEnable()
+    {
+        // LivingEntity의 OnEnable() 실행(상태 초기화)
+        base.OnEnable();
+
+        // HP bar 갱신
+        HPScrollbar.gameObject.SetActive(true);
+        HPScrollbar.size = health / startingHealth;
+    }
+
     private void Update()
     {
         // 추적 대상의 존재 여부에 따라 다른 애니메이션을 재생
         enemyAnimator.SetBool("HasTarget", hasTarget);
+    }
+
+    private void FixedUpdate()
+    {
+        enemyCanvas.transform.LookAt(Camera.main.transform);
+        enemyCanvas.transform.Rotate(0, 180, 0);
     }
 
     // 주기적으로 추적할 대상의 위치를 찾아 경로를 갱신
@@ -128,7 +150,6 @@ public class Enemy : LivingEntity
             hitEffect.transform.position = hitPoint;
             hitEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
             hitEffect.Play();
-            Debug.Log("맞았음 : " + hitEffect.transform);
 
             // 피격 효과음 재생
             enemyAudioPlayer.PlayOneShot(hitSound);
@@ -136,6 +157,10 @@ public class Enemy : LivingEntity
 
         // LivingEntity의 OnDamage()를 실행하여 데미지 적용
         base.OnDamage(damage, hitPoint, hitNormal);
+
+        // HP bar 갱신
+        HPScrollbar.size = health / startingHealth;
+        
     }
 
     // 사망 처리
@@ -159,6 +184,9 @@ public class Enemy : LivingEntity
         enemyAnimator.SetTrigger("Die");
         // 사망 효과음 재생
         enemyAudioPlayer.PlayOneShot(deathSound);
+
+        // UI 화면에서 제거
+        enemyCanvas.enabled = false;
     }
 
     private void OnTriggerStay(Collider other)

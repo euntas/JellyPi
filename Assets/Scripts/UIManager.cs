@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
     public GameObject settingUI; // 게임 세팅 메뉴 UI
 
     public Text ammoText; // 탄약 표시용 텍스트
+    public Text playerHPText; // 플레이어 hp 표시용 텍스트
 
     // 게임 오버 UI 활성화
     public void SetActiveGameoverUI(bool active)
@@ -50,5 +51,12 @@ public class UIManager : MonoBehaviour
     public void UpdateAmmoText(int magAmmo, int remainAmmo)
     {
         ammoText.text = magAmmo + "/" + remainAmmo;
+    }
+
+    // 플레이어 HP 텍스트 갱신
+    public void UpdatePlayerHPText(int currentHP, int maxHP)
+    {
+        int displayHP = (currentHP < 0) ? 0 : currentHP; 
+        playerHPText.text = "HP " + displayHP + "/" + maxHP;
     }
 }
