@@ -45,12 +45,12 @@ public class PlayerInput : MonoBehaviour
         }
 
         // 게임오버 상태에서는 사용자 입력을 감지하지 않는다
-        //if (GameManager.instance != null && GameManager.instance.isGameover)
-        //{
-        //    fire = false;
-        //    reload = false;
-        //    return;
-        //}
+        if (GameManager.instance != null && GameManager.instance.isGameover)
+        {
+            fire = false;
+            reload = false;
+            return;
+        }
 
         //// fire에 관한 입력 감지
         //fire = Input.GetButton(fireButtonName);
