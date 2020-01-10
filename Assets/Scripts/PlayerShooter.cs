@@ -7,31 +7,20 @@ public class PlayerShooter : MonoBehaviour
 {
     public Gun gun; // 사용할 총
     public Transform gunPivot; // 총 배치의 기준점
-    private Transform leftHandMount; // 총의 왼쪽 손잡이, 왼손이 위치할 지점
     private Transform rightHandMount; // 총의 오른쪽 손잡이, 오른손이 위치할 지점
     private PlayerInput playerInput; // 플레이어의 입력
     private Animator playerAnimator; // 애니메이터 컴포넌트
 
-    public enum WeaponType_int
-    {
-        WeaponType_None = 0,
-        WeaponType_Pistol = 1,
-        WeaponType_Shotgun = 4
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Start");
-
         // 오른쪽 손잡이 위치
         rightHandMount = transform.Find("Hips_jnt/Spine_jnt/Spine_jnt 1/Chest_jnt/Shoulder_Right_jnt/Arm_Right_jnt/Forearm_Right_jnt/Hand_Right_jnt");
-        leftHandMount = transform.Find("Hips_jnt/Spine_jnt/Spine_jnt 1/Chest_jnt/Shoulder_Left_jnt/Arm_Left_jnt/Forearm_Left_jnt/Hand_Left_jnt");
 
         playerInput = GetComponent<PlayerInput>();
         playerAnimator = GetComponent<Animator>();
 
-        SetGunByWeaponType(0);
+        SetGunByWeaponType((int)Commons.WeaponType_int.WeaponType_None);
     }
 
     private void OnEnable()
@@ -61,8 +50,10 @@ public class PlayerShooter : MonoBehaviour
             if (playerInput.fire)
             {
                 // 발사 입력 감지 시 총 발사
-                playerAnimator.SetBool("Shoot_b", true);
-                gun.Fire();
+                if (gun.Fire())
+                {
+                    playerAnimator.SetBool("Shoot_b", true);
+                }
             }
             else if (playerInput.reload)
             {
@@ -100,13 +91,6 @@ public class PlayerShooter : MonoBehaviour
         // 총의 기준점 gunPivot을 오른손에 맞춤.
         gunPivot.position = rightHandMount.position;
 
-        // IK를 사용하여 왼손의 위치와 회전을 총의 왼쪽 손잡이에 맞춤
-        //playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1.0f);
-        //playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1.0f);
-
-        //playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandMount.position);
-        //playerAnimator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandMount.rotation);
-
         // IK를 사용하여 오른손의 위치와 회전을 총의 오른쪽 손잡이에 맞춤
         playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1.0f);
         playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1.0f);
@@ -116,7 +100,7 @@ public class PlayerShooter : MonoBehaviour
     }
 
     // 해당 weaponType의 총을 선택 
-    public void SetGunByWeaponType(WeaponType_int weaponType)
+    private void SetGunByWeaponType(int weaponType)
     {
         // player 가 가지고 있는 모든 총을 비활성화
         int childCount = gunPivot.childCount;
@@ -130,11 +114,11 @@ public class PlayerShooter : MonoBehaviour
         // 사용할 총 오브젝트 찾기
         switch (weaponType)
         {
-            case WeaponType_int.WeaponType_Pistol:
+            case (int)Commons.WeaponType_int.WeaponType_Pistol:
                 gunObj = transform.Find("Gun Pivot/SA_Wep_Pistol").gameObject;
                 break;
 
-            case WeaponType_int.WeaponType_Shotgun:
+            case (int)Commons.WeaponType_int.WeaponType_Shotgun:
                 gunObj = transform.Find("Gun Pivot/SA_Wep_Shotgun").gameObject;
                 break;
 
@@ -149,10 +133,11 @@ public class PlayerShooter : MonoBehaviour
             gunObj.SetActive(true);
 
             gun = GetComponentInChildren<Gun>();
-            gun.weaponType = (int)weaponType;
+            gun.weaponType = weaponType;
+            gun.SetGunAbillity(weaponType);
 
             // 애니메이션 설정
-            playerAnimator.SetInteger("WeaponType_int", (int)weaponType);
+            playerAnimator.SetInteger("WeaponType_int", weaponType);
             playerAnimator.SetBool("Shoot_b", false);
             playerAnimator.SetBool("Reload_b", false);
         }
@@ -161,13 +146,13 @@ public class PlayerShooter : MonoBehaviour
             gun = null;
 
             // 애니메이션 설정
-            playerAnimator.SetInteger("WeaponType_int", (int)weaponType);
+            playerAnimator.SetInteger("WeaponType_int", weaponType);
         }
     }
 
     // 총기 종류 변환
-    public void ChangeGun(int type)
+    public void ChangeGun(int weaponType)
     {
-        SetGunByWeaponType((WeaponType_int)type);
+        SetGunByWeaponType(weaponType);
     }
 }
