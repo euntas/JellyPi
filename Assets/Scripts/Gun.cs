@@ -11,6 +11,12 @@ public class Gun : MonoBehaviour
         Reloading
     }
 
+    public enum WeaponType_int
+    {
+        WeaponType_Pistol = 1,
+        WeaponType_Shotgun = 4
+    }
+
     public State state { get; private set; } // 현재 총의 상태
 
     public Transform fireTransform; // 탄알이 발사될 위치
@@ -18,6 +24,8 @@ public class Gun : MonoBehaviour
     public GameObject GunFlashObj; // TODO. 발사 때 잠깐 보여줄 빛 모형 오브젝트. 나중에 지울지도 모름.
 
     private LineRenderer bulletLineRenderer; // 탄알 궤적을 그리기 위한 렌더러
+
+    public int weaponType;
 
     private AudioSource gunAudioPlayer; // 총 소리 발사기
     public AudioClip shotClip; // 발사 소리
