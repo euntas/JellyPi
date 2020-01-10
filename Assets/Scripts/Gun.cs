@@ -19,6 +19,8 @@ public class Gun : MonoBehaviour
 
     private LineRenderer bulletLineRenderer; // 탄알 궤적을 그리기 위한 렌더러
 
+    public int weaponType;
+
     private AudioSource gunAudioPlayer; // 총 소리 발사기
     public AudioClip shotClip; // 발사 소리
     public AudioClip reloadClip; // 재장전 소리
@@ -57,7 +59,7 @@ public class Gun : MonoBehaviour
     }
 
     // 발사 시도
-    public void Fire()
+    public bool Fire()
     {
         // 현재 상태가 발사가 가능한 상태
         // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
@@ -67,7 +69,11 @@ public class Gun : MonoBehaviour
             lastFireTime = Time.time;
             // 실제 발사 처리 실행
             Shot();
+
+            return true;
         }
+
+        return false;
     }
 
     // 실제 발사 처리
@@ -187,5 +193,33 @@ public class Gun : MonoBehaviour
 
         // 총의 현재 상태를 발사 준비된 상태로 변경
         state = State.Ready;
+    }
+
+    // 총의 종류에 따라 능력치 설정.
+    public void SetGunAbillity(int _weaponType)
+    {
+        switch (_weaponType)
+        {
+            case (int)Commons.WeaponType_int.WeaponType_Pistol:
+                damage = 15;
+                fireDistance = 25f;
+                timeBetFire = 0.12f;
+                reloadTime = 0.3f;
+                break;
+
+            case (int)Commons.WeaponType_int.WeaponType_Shotgun:
+                damage = 35;
+                fireDistance = 50f;
+                timeBetFire = 1f;
+                reloadTime = 2f;
+                break;
+
+            default:
+                damage = 25;
+                fireDistance = 50f;
+                timeBetFire = 0.12f;
+                reloadTime = 0.3f;
+                break;
+        }
     }
 }
