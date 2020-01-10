@@ -14,6 +14,7 @@ public class PlayerShooter : MonoBehaviour
 
     public enum WeaponType_int
     {
+        WeaponType_None = 0,
         WeaponType_Pistol = 1,
         WeaponType_Shotgun = 4
     }
@@ -151,17 +152,20 @@ public class PlayerShooter : MonoBehaviour
             gun.weaponType = (int)weaponType;
 
             // 애니메이션 설정
-            playerAnimator.SetInteger("WeaponType_int", gun.weaponType);
+            playerAnimator.SetInteger("WeaponType_int", (int)weaponType);
             playerAnimator.SetBool("Shoot_b", false);
             playerAnimator.SetBool("Reload_b", false);
         }
         else
         {
             gun = null;
-            playerAnimator.SetInteger("WeaponType_int", 0);
+
+            // 애니메이션 설정
+            playerAnimator.SetInteger("WeaponType_int", (int)weaponType);
         }
     }
 
+    // 총기 종류 변환
     public void ChangeGun(int type)
     {
         SetGunByWeaponType((WeaponType_int)type);
