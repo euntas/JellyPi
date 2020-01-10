@@ -11,12 +11,6 @@ public class Gun : MonoBehaviour
         Reloading
     }
 
-    public enum WeaponType_int
-    {
-        WeaponType_Pistol = 1,
-        WeaponType_Shotgun = 4
-    }
-
     public State state { get; private set; } // 현재 총의 상태
 
     public Transform fireTransform; // 탄알이 발사될 위치
@@ -65,7 +59,7 @@ public class Gun : MonoBehaviour
     }
 
     // 발사 시도
-    public void Fire()
+    public bool Fire()
     {
         // 현재 상태가 발사가 가능한 상태
         // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
@@ -75,7 +69,11 @@ public class Gun : MonoBehaviour
             lastFireTime = Time.time;
             // 실제 발사 처리 실행
             Shot();
+
+            return true;
         }
+
+        return false;
     }
 
     // 실제 발사 처리
@@ -195,5 +193,33 @@ public class Gun : MonoBehaviour
 
         // 총의 현재 상태를 발사 준비된 상태로 변경
         state = State.Ready;
+    }
+
+    // 총의 종류에 따라 능력치 설정.
+    public void SetGunAbillity(int _weaponType)
+    {
+        switch (_weaponType)
+        {
+            case (int)Commons.WeaponType_int.WeaponType_Pistol:
+                damage = 15;
+                fireDistance = 25f;
+                timeBetFire = 0.12f;
+                reloadTime = 0.3f;
+                break;
+
+            case (int)Commons.WeaponType_int.WeaponType_Shotgun:
+                damage = 35;
+                fireDistance = 50f;
+                timeBetFire = 1f;
+                reloadTime = 2f;
+                break;
+
+            default:
+                damage = 25;
+                fireDistance = 50f;
+                timeBetFire = 0.12f;
+                reloadTime = 0.3f;
+                break;
+        }
     }
 }
