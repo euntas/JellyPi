@@ -97,6 +97,7 @@ public class PlayerHealth : LivingEntity
                 item.Use(gameObject);
                 // 아이템 습득 소리 재생
                 playerAudioPlayer.PlayOneShot(itemPickupClip);
+                Debug.Log("아이템 사용");
             }
         }
     }
