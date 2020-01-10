@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3572619366513691058}
   - component: {fileID: 338734918601528530}
   - component: {fileID: 3654347664129352043}
+  - component: {fileID: 3676039886221937792}
   m_Layer: 0
   m_Name: SA_Item_MedicBag_mine
   m_TagString: Untagged
@@ -166,3 +167,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 60
+--- !u!135 &3676039886221937792
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6177699515008865280}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5590515
+  m_Center: {x: -0.017166138, y: 0.20893937, z: -0.000000059604645}

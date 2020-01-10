@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1837003891923643566}
   - component: {fileID: 1837003891923643565}
   - component: {fileID: 1837003891923643567}
+  - component: {fileID: 7010614412151460675}
   m_Layer: 0
   m_Name: SA_Item_Ammo_Shotgun_mine
   m_TagString: Untagged
@@ -166,3 +167,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: 30
+--- !u!135 &7010614412151460675
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837003891923643564}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.41083717
+  m_Center: {x: -0.030813217, y: 0.15909171, z: 0}
