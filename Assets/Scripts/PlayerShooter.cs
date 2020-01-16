@@ -153,6 +153,7 @@ public class PlayerShooter : MonoBehaviour
     // 총기 종류 변환
     public void ChangeGun(int weaponType)
     {
+        Debug.Log("총 바꾸기 :" + weaponType);
         SetGunByWeaponType(weaponType);
     }
 }
