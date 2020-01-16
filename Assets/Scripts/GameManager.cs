@@ -75,6 +75,15 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // 마지막 wave이고 남은 적이 없으면 스테이지 클리어이다
+        if (enemySpawner != null && currentStage != null)
+        {
+            if (enemySpawner.getCurrentEnemyCount() == 0 && enemySpawner.wave == currentStage.totalWaveNum)
+            {
+                StartCoroutine(StageClearRoutine());
+            }
+        }
+        
     }
 
     // 게임 오버 처리
@@ -86,8 +95,24 @@ public class GameManager : MonoBehaviour
         UIManager.instance.SetActiveGameoverUI(true);
     }
 
-    // 게임 앱 종료
-    public void QuitGame()
+    // 게임 스테이지 클리어 처리
+    private IEnumerator StageClearRoutine()
+    {
+        // 점수 계산하여 골드 추가
+        int rewardGold = score;
+
+        // 골드 처리
+        gold += rewardGold;
+        UIManager.instance.UpdateGoldText(gold);
+
+        yield return new WaitForSeconds(3);
+
+        // 스테이지 클리어 처리
+        currentStage.ClearStage(rewardGold);
+    }
+
+        // 게임 앱 종료
+        public void QuitGame()
     {
         Debug.Log("quit game");
         Application.Quit();

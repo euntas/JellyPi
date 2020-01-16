@@ -21,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
     public Color strongEnemyColor = Color.red; // 강한 적 AI가 가지게 될 피부색
 
     private List<Enemy> enemies = new List<Enemy>(); // 생성된 적들을 담는 리스트
-    private int wave; // 현재 웨이브
+    public int wave { get; private set; } // 현재 웨이브
 
 
     void Update()
@@ -105,5 +105,11 @@ public class EnemySpawner : MonoBehaviour
         enemy.onDeath += () => Destroy(enemy.gameObject, 10f);
         // 적 사망 시 점수 상승
         enemy.onDeath += () => GameManager.instance.AddScore(100);
+    }
+
+    // 현재 남은 적의 수 가져오기
+    public int getCurrentEnemyCount()
+    {
+        return enemies.Count;
     }
 }
