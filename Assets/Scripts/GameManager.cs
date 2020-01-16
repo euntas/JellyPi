@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     private int score = 0; // 현재 게임 점수
     public bool isGameover { get; private set; } // 게임 오버 상태
+    public bool isPause { get; private set; } // 일시정지 상태
 
     private void Awake()
     {
@@ -37,8 +38,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        isPause = false;
+
         // 플레이어 캐릭터의 사망 이벤트 발생시 게임 오버
         FindObjectOfType<PlayerHealth>().onDeath += EndGame;
+    }
+
+    private void Update()
+    {
     }
 
     // 게임 오버 처리
@@ -50,10 +57,29 @@ public class GameManager : MonoBehaviour
         UIManager.instance.SetActiveGameoverUI(true);
     }
 
+    // 게임 앱 종료
     public void QuitGame()
     {
         Debug.Log("quit game");
         Application.Quit();
+    }
+
+    // 게임 일시정지
+    public void PauseGame(bool _isPause)
+    {
+        isPause = _isPause;
+        Debug.Log("ispause : " + isPause);
+        
+        if (isPause)
+        {
+            // 일시정지 활성화
+            Time.timeScale = 0;
+        }
+        else
+        {
+            // 일시정지 비활성화
+            Time.timeScale = 1;
+        }
     }
 
     // 점수를 추가하고 UI 갱신
