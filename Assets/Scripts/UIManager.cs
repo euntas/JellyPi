@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     public Text playerHPText; // 플레이어 hp 표시용 텍스트
     public Text waveText; // 적 웨이브 표시용 텍스트
     public Text scoreText; // 점수 표시용 텍스트
+    public Text stageNameText; // 스테이지 이름 텍스트
+    public Text goldText; // 골드 텍스트
 
     // 게임 오버 UI 활성화
     public void SetActiveGameoverUI(bool active)
@@ -76,14 +78,26 @@ public class UIManager : MonoBehaviour
     }
 
     // 적 웨이브 텍스트 갱신
-    public void UpdateWaveText(int waves, int count)
+    public void UpdateWaveText(int wave, int totalWave, int count)
     {
-        waveText.text = "Wave : " + waves + "\nEnemy Left : " + count;
+        waveText.text = "Wave : " + wave + "/" + totalWave + "\nEnemy Left : " + count;
     }
 
     // 점수 텍스트 갱신
     public void UpdateScoreText(int newScore)
     {
         scoreText.text = "Score : " + newScore;
+    }
+
+    // 스테이지 이름 텍스트 갱신
+    public void UpdateStageNameText(string name)
+    {
+        stageNameText.text = name;
+    }
+
+    // 골드 텍스트 갱신
+    public void UpdateGoldText(int gold)
+    {
+        goldText.text = gold.ToString();
     }
 }
