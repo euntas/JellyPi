@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject gameoverUI; // 게임 오버시 활성화할 UI
     public GameObject settingUI; // 게임 세팅 메뉴 UI
+    public GameObject shopUI; // 게임 상점 UI
 
     public Text ammoText; // 탄약 표시용 텍스트
     public Text playerHPText; // 플레이어 hp 표시용 텍스트
@@ -39,6 +40,12 @@ public class UIManager : MonoBehaviour
     public void SetActiveSettingUI(bool active)
     {
         settingUI.SetActive(active);
+    }
+
+    // 게임 종료시 UI
+    public void SetActiveshopUI(bool active)
+    {
+        shopUI.SetActive(active);
     }
 
     // 게임 재시작
