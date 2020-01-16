@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public bool isSpawnerReady = false; // 스포너가 준비 상태인지
     public Enemy enemyPrefab; // 생성할 적 AI
 
     public Transform[] spawnPoints; // 적 AI를 소환할 위치
@@ -20,7 +21,8 @@ public class EnemySpawner : MonoBehaviour
     public Color strongEnemyColor = Color.red; // 강한 적 AI가 가지게 될 피부색
 
     private List<Enemy> enemies = new List<Enemy>(); // 생성된 적들을 담는 리스트
-    private int wave; // 현재 웨이브
+    public int wave { get; private set; } // 현재 웨이브
+
 
     void Update()
     {
@@ -30,8 +32,14 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        // 적을 모두 물리친 경우 다음 스폰 실행
-        if (enemies.Count <= 0)
+        // 스포너가 준비 상태가 아니면 생성하지 않음
+        if (isSpawnerReady == false)
+        {
+            return;
+        }
+
+        // 적을 모두 물리치고 다음 스테이지가 존재할 경우 다음 스폰 실행
+        if (enemies.Count <= 0 && (wave < GameManager.instance.currentStage.totalWaveNum))
         {
             SpawnWave();
         }
@@ -41,10 +49,11 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // 웨이브 정보를 UI로 표시
-    private void UpdateUI()
+    public void UpdateUI()
     {
+        int totalWave = GameManager.instance.currentStage.totalWaveNum;
         // 현재 웨이브와 남은 적의 수 표시
-        UIManager.instance.UpdateWaveText(wave, enemies.Count);
+        UIManager.instance.UpdateWaveText(wave, totalWave, enemies.Count);
     }
 
     // 현재 웨이브에 맞춰 적을 생성
@@ -96,5 +105,11 @@ public class EnemySpawner : MonoBehaviour
         enemy.onDeath += () => Destroy(enemy.gameObject, 10f);
         // 적 사망 시 점수 상승
         enemy.onDeath += () => GameManager.instance.AddScore(100);
+    }
+
+    // 현재 남은 적의 수 가져오기
+    public int getCurrentEnemyCount()
+    {
+        return enemies.Count;
     }
 }

@@ -24,6 +24,30 @@ public class GameManager : MonoBehaviour
 
     private int score = 0; // 현재 게임 점수
     public bool isGameover { get; private set; } // 게임 오버 상태
+    public bool isPause { get; private set; } // 일시정지 상태
+
+    public Stage currentStage; // 현재 스테이지
+    public EnemySpawner enemySpawner; // 적 스포너
+
+    // 게임 머니 (골드)
+    private int gold
+    {
+        get
+        {
+            if (!PlayerPrefs.HasKey("Gold"))
+            {
+                return 0;
+            }
+
+            int tmpGold = PlayerPrefs.GetInt("Gold");
+            return tmpGold;
+        }
+
+        set
+        {
+            PlayerPrefs.SetInt("Gold", value);
+        }
+    }
 
     private void Awake()
     {
@@ -37,8 +61,29 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        isPause = false;
+
         // 플레이어 캐릭터의 사망 이벤트 발생시 게임 오버
         FindObjectOfType<PlayerHealth>().onDeath += EndGame;
+
+        // 스테이지 로드
+        LoadStage(0);
+
+        // gold UI 업데이트
+        UIManager.instance.UpdateGoldText(gold);
+    }
+
+    private void Update()
+    {
+        // 마지막 wave이고 남은 적이 없으면 스테이지 클리어이다
+        if (enemySpawner != null && currentStage != null)
+        {
+            if (enemySpawner.getCurrentEnemyCount() == 0 && enemySpawner.wave == currentStage.totalWaveNum)
+            {
+                StartCoroutine(StageClearRoutine());
+            }
+        }
+        
     }
 
     // 게임 오버 처리
@@ -50,10 +95,44 @@ public class GameManager : MonoBehaviour
         UIManager.instance.SetActiveGameoverUI(true);
     }
 
-    public void QuitGame()
+    // 게임 스테이지 클리어 처리
+    private IEnumerator StageClearRoutine()
+    {
+        // 점수 계산하여 골드 추가
+        int rewardGold = score;
+
+        // 골드 처리
+        gold += rewardGold;
+        UIManager.instance.UpdateGoldText(gold);
+
+        yield return new WaitForSeconds(3);
+
+        // 스테이지 클리어 처리
+        currentStage.ClearStage(rewardGold);
+    }
+
+        // 게임 앱 종료
+        public void QuitGame()
     {
         Debug.Log("quit game");
         Application.Quit();
+    }
+
+    // 게임 일시정지
+    public void PauseGame(bool _isPause)
+    {
+        isPause = _isPause;
+        
+        if (isPause)
+        {
+            // 일시정지 활성화
+            Time.timeScale = 0;
+        }
+        else
+        {
+            // 일시정지 비활성화
+            Time.timeScale = 1;
+        }
     }
 
     // 점수를 추가하고 UI 갱신
@@ -67,5 +146,41 @@ public class GameManager : MonoBehaviour
             // 점수 UI 텍스트 갱신
             UIManager.instance.UpdateScoreText(score);
         }
+    }
+
+    // 스테이지 로드
+    public void LoadStage(int _stageId)
+    {
+        // 스테이지 정보 초기화
+        currentStage = new Stage();
+        currentStage.InitStage(0);
+
+        // EnemySpawner의 적 스폰 위치 변수 세팅
+        Transform[] _spawnPoints = new Transform[currentStage.spawnPointNums.Length];
+        
+        int index = 0;
+        foreach(int pointNum in currentStage.spawnPointNums)
+        {
+            // 씬에 배치된 Spawn Point 오브젝트 중 pointNum 에 해당하는 것을 찾는다
+            GameObject spawnPoint = GameObject.Find("Spawn Point " + pointNum);
+
+            if (spawnPoint != null)
+            {
+                _spawnPoints[index] = spawnPoint.transform;
+                index++;
+            }
+        }
+
+        if(_spawnPoints[0] != null)
+        {
+            enemySpawner.spawnPoints = _spawnPoints;
+        }
+
+        // 스포너의 상태를 준비완료로 변경
+        enemySpawner.isSpawnerReady = true;
+
+        // UI 내용 업데이트
+        UIManager.instance.UpdateStageNameText(currentStage.stageName);
+        enemySpawner.UpdateUI();
     }
 }
