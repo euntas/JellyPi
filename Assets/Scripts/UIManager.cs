@@ -33,18 +33,25 @@ public class UIManager : MonoBehaviour
     // 게임 오버 UI 활성화
     public void SetActiveGameoverUI(bool active)
     {
+        GameManager.instance.PauseGame(active);
+
         gameoverUI.SetActive(active);
     }
 
     // 게임 종료시 UI
     public void SetActiveSettingUI(bool active)
     {
+        GameManager.instance.PauseGame(active);
+
         settingUI.SetActive(active);
     }
 
     // 게임 종료시 UI
     public void SetActiveshopUI(bool active)
     {
+        Debug.Log("setactiveshopUI : " + active);
+        GameManager.instance.PauseGame(active);
+
         shopUI.SetActive(active);
     }
 
