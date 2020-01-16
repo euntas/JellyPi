@@ -46,9 +46,9 @@ public class PlayerHealth : LivingEntity
         base.RestoreHealth(newHealth);
 
         // 갱신된 체력으로 체력 스크롤바 갱신
-        healthScrollbar.size = newHealth / startingHealth;
+        healthScrollbar.size = health / startingHealth;
         // UI HP Text 갱신
-        UIManager.instance.UpdatePlayerHPText((int)newHealth, (int)startingHealth);
+        UIManager.instance.UpdatePlayerHPText((int)health, (int)startingHealth);
     }
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)

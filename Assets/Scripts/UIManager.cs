@@ -49,7 +49,6 @@ public class UIManager : MonoBehaviour
     // 게임 종료시 UI
     public void SetActiveshopUI(bool active)
     {
-        Debug.Log("setactiveshopUI : " + active);
         GameManager.instance.PauseGame(active);
 
         shopUI.SetActive(active);
