@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     public void PauseGame(bool _isPause)
     {
         isPause = _isPause;
-        Debug.Log("ispause : " + isPause);
         
         if (isPause)
         {
